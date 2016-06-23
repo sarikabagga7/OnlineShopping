@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>JSON</title>
+<script type="text/javascript" src="scripts/ajax-utils.js"></script>
+<script type="text/javascript"
+	src="http://code.jquery.com/jquery-latest.min.js">
+	
+</script>
+<script type="text/javascript">
+
+	function searchBookClick() {
+		var textSearchBook = document.getElementById("tbSearchBook").value;		
+		var googleAPI = "https://www.googleapis.com/books/v1/volumes?q="+textSearchBook;				
+		$.getJSON(googleAPI, function(response) {		
+		for (var i = 0; i < response.items.length; i++) {		
+		var item = response.items[i];		
+		document.getElementById("searchBook").innerHTML += "<br>"
+		+ item.volumeInfo.title;
+		}
+		});
+	}
+
+	
+</script>
+</head>
+<body>
+	<ul id='container'></ul>
+	<a href="http://localhost:8080/project-onlinestore/product.html/">Products</a> &nbsp;&nbsp;<a href="http://www.w3schools.com/html/">Create Account</a>&nbsp;&nbsp;<a href="http://www.w3schools.com/html/">Your Account</a>
+	
+	<div id="left">
+	
+	<h1>Products:</h1>
+	
+	<br /> Select a book:
+	<input type="text" name="tbSearchBook" id="tbSearchBook" />
+	<input type="button" onclick="searchBookClick();" value="Submit" />
+
+	<br /><br><br>
+
+	<input type="button" onclick="addorder();" value="Order" style="margin-left:270px;" />
+
+	<div id="searchBook" />
+	</div>
+
+
+</body>
+</html>
+</html>

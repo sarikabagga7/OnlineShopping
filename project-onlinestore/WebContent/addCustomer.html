@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>JSON</title>
+<script type="text/javascript" src="scripts/ajax-utils.js"></script>
+<script type="text/javascript"
+	src="http://code.jquery.com/jquery-latest.min.js">
+	
+</script>
+<script type="text/javascript">
+$(document).ready(function(){	
+	//get a reference to the select element
+	$select = $('#country');
+	$select.html('');
+	//request the JSON data and parse into the select element
+	$.ajax({
+	  url: 'http://services.groupkt.com/country/get/all',
+	  dataType:'JSON',
+	  success:function(data){
+		  var items = [];		 		 
+		  $.each( data, function( key, val ) {			 
+			for(var i=0;i<val.result.length;i++){  
+		    	//items.push( "<li id='" + key + "'>" + val.result[i].name + "</li>" );
+		    	$select.append('<option id="' + i + '">' + val.result[i].name + '</option>');
+		    	//alert(i);
+			}
+		  });
+		 
+		  $( "<ul/>", {
+		    "class": "my-new-list",
+		    html: items.join( "" )
+		  }).appendTo( "body" );		  		  		  		  		 	
+	  },
+	  error:function(){
+	    //if there is an error append a 'none available' option
+	    $select.html('<option id="-1">none available</option>');
+	  }
+	});
+
+});
+	
+	function addStock() {						
+		$.ajax({
+			url : "http://localhost:8080/project-onlinestore/rest/customerservice/customers",
+			type : "POST",
+			contentType: "application/json",		     		   
+			data : JSON.stringify({			
+			"Customer":{"email":"xyz@gmail.com","name":"Sarika3445"}
+			}),
+			success : function (result) {
+				debugger;
+				  var user_id=result.customer;
+				console.log("OK " + user_id);
+				alert("Customer record added. ");
+			},
+			error : function (result ) {
+				debugger;
+				alert(result.status + ' ' + result.statusText);
+			},
+
+		});
+	}
+</script>
+</head>
+<body>
+	<ul id='container'></ul>
+
+	<h3>REST Web Services</h3>
+	<b>Stock Demo</b>
+	<br /> Select a stock:
+	<input type="text" name="symbol" id="symbol" />
+	
+	 First name: <input type="text" name="fname"><br>
+  Last name: <input type="text" name="lname"><br>
+ Email: <input type="text" name="lname"><br>
+  Address: <input type="text" name="lname"><br>
+  
+  <select id="country">
+  <option></option>
+  
+</select>
+	
+	<input type="button" onclick="getStock();" value="Submit" />
+
+	<br /> Add a stock:
+
+	<input type="button" onclick="addStock();" value="Submit" />
+
+	<div id="stockArea" />
+	</div>
+
+</body>
+</html>
+</html>

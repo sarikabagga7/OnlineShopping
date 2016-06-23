@@ -1,0 +1,262 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>JSON</title>
+<script type="text/javascript" src="scripts/ajax-utils.js"></script>
+<script type="text/javascript"
+	src="http://code.jquery.com/jquery-latest.min.js">
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript">
+
+	//fill the country list
+	$(document).ready(function(){
+		//get a reference to the select element
+//		$("#createAccount").hide();
+		$("#yourAccount").hide();
+		$("#products").hide();
+		$select = $('#cmbCountry');
+		$select2 = $('#cmbYourCountry');
+		 $select.html('');
+		 $select2.html('');
+		//request the JSON data and parse into the select element
+		$.ajax({
+		  url: 'http://services.groupkt.com/country/get/all',
+		  dataType:'JSON',
+		  success:function(data){
+			  var items = [];
+			  $.each( data, function( key, val ) {
+				for(var i=0;i<val.result.length;i++){
+			    	$select.append('<option id="' + i + '">' + val.result[i].name + '</option>');
+			    	$select2.append('<option id="' + i + '">' + val.result[i].name + '</option>');
+				}			  });
+			  $( "<ul/>", {
+			    "class": "my-new-list",
+			    html: items.join( "" )
+			  }).appendTo( "body" );
+		  },
+
+		  error:function(){
+
+		    //if there is an error append a 'none available' option
+
+			    $select.html('<option id="-1">none available</option>');
+			    $select2.html('<option id="-1">none available</option>');
+					  }
+		});
+	});
+</script>
+<script>
+function addCustomer() {
+		var firstName = $('#txtFirstName').val();
+		var lastName = $('#txtLastName').val();
+		var email = $('#txtEmail').val();
+		var address = $('#txtAddress').val();
+		var country = $("#cmbCountry option:selected").text();
+		
+		if(firstName==""  || lastName=="" || email=="" || address=="" || country==""  )
+			{
+			alert("Please enter all required fields.")
+			return;
+			
+			}
+
+		var obj1 = {};
+		obj1['name'] = firstName;
+		obj1['lastName'] = lastName;
+		obj1['email'] = email;
+		obj1['address'] = address;
+		obj1['country'] = country;
+
+		var obj2 = {};
+		obj2['Customer'] = obj1;
+
+		$.ajax({
+			url : "http://localhost:8080/project-onlinestore/rest/customerservice/customers",
+			type : "POST",
+			dataType: 'JSON',
+			contentType: 'application/json',
+			data : JSON.stringify(obj2),
+			success : function(data) {
+				alert("Error! Customer dint add.");
+			},
+			error : function(data) {
+				alert("New customer record added. ");
+			}
+
+		});
+
+		}
+		
+function bookSearch() {
+	var textSearchBook = document.getElementById("tbSearchBook").value;		
+	var googleAPI = "https://www.googleapis.com/books/v1/volumes?q="+textSearchBook;				
+	$.getJSON(googleAPI, function(response) {		
+	for (var i = 0; i < response.items.length; i++) {		
+	var item = response.items[i];		
+	document.getElementById("searchBook").innerHTML += "<br>"
+	+ item.volumeInfo.title;
+	}
+	});
+}
+
+</script>
+<script>
+function createAccount() {
+	$("#createAccount").show();
+	$("#yourAccount").hide();
+	$("#products").hide();
+	}
+</script>
+<script>
+function yourAccount() {
+	$("#createAccount").hide();
+	$("#yourAccount").show();
+	//var customerId = $("#txtCustomerId").val();
+	var customerId = 70;
+		//alert(symbol);
+	var request = "http://localhost:8080/project-onlinestore/rest/customerservice/customers/"
+			+ customerId;
+	$.getJSON(request, function(response) {
+
+		var customer = response.Customer;
+		//alert(JSON.stringify(stock));
+			//Display the result
+		if (customer) {
+			$("#txtYourFirstName").val(customer.name);
+			$("#txtYourLastName").val(customer.lastName);
+			$("#txtYourEmail").val(customer.email);
+			$("#txtYourAddress").val(customer.address);
+			$("#cmbYourCountry option:selected").text(customer.country);
+			}
+			else {
+				result = "Unknown Customer";
+				alert(result);
+			}
+	});
+	request = "http://localhost:8080/project-onlinestore/rest/customerservice/order/customer/"
+		+ customerId;
+	//$select = $('#orders');
+	//$select.html('');
+
+	$.getJSON(request, function(response) {
+		var orders = response.order;
+debugger;
+		//for (var i =0 ; i<order.length ; i++)
+			{
+				var a= '<a id ="' + orders.orderID + '" ' + ' href="#" >' + orders.orderID + '  ' + orders.productName +'</br> </a>';
+			//$select.append(a);
+				document.getElementById("orders").innerHTML = a;
+			}
+	});
+
+
+
+
+	}
+</script>
+<script>
+function editYourAccount() {
+		var customerId =  $('#txtCustomerId').val();
+		var firstName = $('#txtYourFirstName').val();
+		var lastName = $('#txtYourLastName').val();
+		var email = $('#txtYourEmail').val();
+		var address = $('#txtYourAddress').val();
+		var country = $("#cmbYourCountry option:selected").text();
+
+		var obj1 = {};
+		obj1['id'] = customerId;
+		obj1['name'] = firstName;
+		obj1['lastName'] = lastName;
+		obj1['email'] = email;
+		obj1['address'] = address;
+		obj1['country'] = country;
+
+		var obj2 = {};
+		obj2['Customer'] = obj1;
+var urlrequest="http://localhost:8080/project-onlinestore/rest/customerservice/order/customer/70";
+alert(urlrequest);
+		$.ajax({
+
+			url : urlrequest ,
+			type : "PUT",
+			dataType: 'JSON',
+			contentType: 'application/json',
+			data : JSON.stringify(obj2),
+			success : function(data) {
+				alert("Customer record updated.");
+			},
+			error : function(data) {
+				alert("Error in updating record.");
+			}
+
+		});
+
+		}
+</script>
+
+
+<script>
+function products() {
+	$("#createAccount").hide();
+	$("#yourAccount").hide();
+	$("#products").show();
+}
+	</script>
+
+</head>
+<body>
+	<font size="5px"><a href="#products" onclick="products();"> Products </a>&nbsp;&nbsp;<a href="#createAccount" onclick="createAccount();"> Create Account </a>&nbsp;&nbsp; <a href="#yourAccount" onclick="yourAccount();"> Your Account </a> </font><br><br><br><br>
+		
+		<div style="border-style: solid; padding:7px">
+		
+	<div id="createAccount" name="createAccount">
+	<h2>Create an account</h2>
+		First Name:<font color='red'>*</font> <input type="text" name="txtFirstName" id="txtFirstName"><br><br>
+		Last Name: <font color='red'>*</font><input type="text" name="txtLastName" id="txtLastName"><br><br>
+		Email     :<font color='red'>*</font><input type="text" name="txtEmail" id="txtEmail"><br><br>
+		Address  :<font color='red'>*</font><input type="text" name="txtAddress" id="txtAddress"><br><br>
+		Country  :<font color='red'>*</font><Select name="cmbCountry" id="cmbCountry">
+				  </Select><br><br>
+				  <input type="button" name="submit" id="submit" value="submit" onclick="addCustomer();">
+	</div>
+
+	<div id="yourAccount" name="yourAccount" style="display:inline-block;">
+	<div id="leftside" style="float:left;">
+	<h2>Your Account</h2>
+		First Name: <input type="text" name="txtYourFirstName" id="txtYourFirstName"><br><br>
+		Last Name: <input type="text" name="txtYourLastName" id="txtYourLastName"><br><br>
+		Email     :<input type="text" name="txtYourEmail" id="txtYourEmail"><br><br>
+		Address  :<input type="text" name="txtYourAddress" id="txtYourAddress"><br><br>
+		Country  :<Select name="cmbYourCountry" id="cmbYourCountry"></Select>
+				  </br><br>
+				  <input type="button" name="edit" id="edit" value="Edit" onclick="editYourAccount();">
+	</div>
+
+	<div id="rightside" style="float:right; margin-bottom:0px;">
+	<h2>Your Orders</h2>
+	<p id="orders" name="orders"></p>
+	</div>
+	</div>
+
+	<div id="products">
+	<h1>Products:</h1>
+
+	<br /> Select a book:
+	<input type="text" name="tbSearchBook" id="tbSearchBook" />
+	<input type="button" onclick="bookSearch();" value="Submit" />
+
+	<br /><br><br>
+
+	<input type="button" onclick="addOrder();" value="Order" style="margin-left:270px;" />
+
+	<div id="searchBook"></div>
+	</div>
+
+
+</div>
+
+</body>
+
+</html>

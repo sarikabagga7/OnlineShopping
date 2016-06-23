@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>JSON</title>
+<script type="text/javascript" src="scripts/ajax-utils.js"></script>
+<script type="text/javascript"
+	src="http://code.jquery.com/jquery-latest.min.js">
+	
+</script>
+<script type="text/javascript">
+$(document).ready(function(){
+	
+	$("#left").hide();
+	
+	//get a reference to the select element
+	$select = $('#cmbCountry');
+	$select.html('');
+	//request the JSON data and parse into the select element
+	$.ajax({
+	  url: 'http://services.groupkt.com/country/get/all',
+	  dataType:'JSON',
+	  success:function(data){
+		  var items = [];		 		  
+		  $.each( data, function( key, val ) {
+			 
+			for(var i=0;i<val.result.length;i++){  
+		    	//items.push( "<li id='" + key + "'>" + val.result[i].name + "</li>" );
+		    	$select.append('<option id="' + i + '">' + val.result[i].name + '</option>');
+		    	//alert(i);
+			}
+		  });
+		 
+		  $( "<ul/>", {
+		    "class": "my-new-list",
+		    html: items.join( "" )
+		  }).appendTo( "body" );		  		  		  		  		 
+	  },
+	  error:function(){
+	    //if there is an error append a 'none available' option
+	    $select.html('<option id="-1">none available</option>');
+	  }
+	});
+
+});
+	function getStock() {
+		var symbol = document.getElementById("symbol").value;
+		alert(symbol);
+		var request = "http://localhost:8080/ws-rest-scratch/rest/stockservice/stocks/json/"
+				+ symbol;
+		$.getJSON(request, function(response) {
+			var stock = response.stock;
+			//alert(JSON.stringify(stock));
+
+			//Display the result			
+			if (stock) {
+				result = "<ul>" + "<li>Symbol: " + stock.stockId + "</li>"
+						+ "<li>Company name: " + stock.companyName + "</li>"
+						+ "<li>Price: " + stock.price + "</li>" + "</ul>";
+			} else {
+				result = "Unknown Stock";
+			}
+			document.getElementById("stockArea").innerHTML = result;
+
+		});
+	}
+
+	function addStock2() {
+
+		$.postJSON = function(url, data, callback) {
+			return jQuery
+					.ajax({
+						headers : {
+							'Accept' : 'application/json',
+							'Content-Type' : 'application/json'
+						},
+						'type' : 'POST',
+						'url' : 'http://localhost:8080/ws-rest-2/rest/stockservice/stocks',
+						data : JSON.stringify({
+							stockId : "Gerry",
+							companyName : "Sydney",
+							price : "30"
+						}),
+						'dataType' : 'json',
+						'success' : function(data) {
+							alert(data);
+						}
+
+					});
+		};
+	}
+
+	functon check()
+	{
+		$("#left").show();	
+	}
+	
+	function addCustomer() {
+		
+		var firstName = $('#txtFirstName').val();
+		var lastName = $('#txtLastName').val();
+		var email = $('#txtEmail').val();
+		var address = $('#txtAddress').val();
+		var country = $("#cmbCountry option:selected").text();
+		
+		var obj1 = {};
+		obj1['firstName'] = firstName;
+		obj1['lastName'] = lastName;
+		obj1['email'] = email;
+		obj1['address'] = address;
+		obj1['country'] = country;
+		
+		var obj2 = {};
+		obj2['Customer'] = obj1;
+		//{"Customer":{"email":"xyz@gmail.com","name":"Sarika3445"}}
+				
+		$.ajax({
+			url : "http://localhost:8080/project-onlinestore/rest/customerservice/customers",
+			type : "POST",
+			contentType: "application/json",
+		     
+		   
+			data : JSON.stringify(obj2),
+			success : function (result) {
+				debugger;
+				  var user_id=obj2.id;
+				console.log("OK " + user_id);
+				alert("Record added");
+			},
+			error : function (result ) {
+				debugger;
+				alert(result.status + ' ' + result.statusText);
+			},
+
+		});
+	}
+</script>
+</head>
+<body>
+	<ul id='container'></ul>
+	<a id="productLink" href="#left" onclick='return check()'>Products</a> &nbsp;&nbsp;<a href="http://www.w3schools.com/html/">Create Account</a>&nbsp;&nbsp;<a href="#middle">Your Account</a>
+	
+	<div id="middle">
+	<h1>Create an account:</h1>
+	
+	 First name: <input type="text" name="fname" id="txtFirstName"><br><br>
+  Last name: <input type="text" name="lname" id="txtLastName"><br><br>
+ Email: <input type="text" name="Email" id="txtEmail"><br><br>
+  Address: <input type="text" name="Address" id="txtAddress"><br><br>  
+ Country: <select id="cmbCountry">
+  <option></option>
+  
+</select>
+	
+	<br /> <br>
+
+	<input type="button" onclick="addCustomer();" value="Submit" />
+
+	<div id="stockArea" />
+	</div>
+	
+	<div id="left">
+	
+	<h1>Products:</h1>
+	
+	<br /> Select a book:
+	<input type="text" name="tbSearchBook" id="tbSearchBook" />
+	<input type="button" onclick="searchBookClick();" value="Submit" />
+
+	<br /><br><br>
+
+	<input type="button" onclick="addorder();" value="Order" style="margin-left:270px;" />
+
+	<div id="searchBook" />
+	</div>
+
+
+</body>
+</html>
+</html>
