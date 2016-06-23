@@ -1,0 +1,68 @@
+{# empty Twig template #}
+{% extends "base.html.twig" %}
+
+{% block title %}Cart{% endblock %}
+
+{% block body %}
+    <script src="/jquery.min.js"></script>
+    <script>
+
+        $(document).ready(function ()
+        {
+            $(".quanInput").bind('input', function () {
+                var quantity = $(this).val();
+                var itemID = $(this).attr('itemID');
+                if (quantity === "")
+                    return;
+                var data = {quantity: quantity};
+
+                $.ajax({
+                    url: "/api.php/cartitems/" + itemID,
+                    type: "PUT", //put is update
+                    data: JSON.stringify(data),
+                    contentType: 'application/json',
+                    success: function (result) {
+
+                        //loadTodoList();
+                        console.log(result);
+                        if (!result) {
+                            alert("Error updaing quantity of the product");
+                        }
+
+                    },
+                    error: function () {
+                        console.log("cart items update failed");
+                        alert("Error update the quantity of the product");
+
+                    }
+
+                });
+
+            });
+        });
+
+    </script>
+
+
+    <table border="1" class="table">
+        <tr><th>#</th><th>Item Name</th><th>Unit Price</th><th>Quantity</th><th>Delete</th></tr>
+
+        {% for item in cartItems %}
+
+            <tr><td>{{loop.index}} </td>
+                <td>{{item.productName}} </td>
+                <td>{{item.ProductPrice}} </td>
+                <td><input class="quanInput" width="100" type="number" value="{{item.quantity}}" itemPrice="{{item.price}}" itemID="{{item.ID}}"> </td>
+                <td><a class="contact" href="/delete/{{item.ID}}"><span>Delete</span></a></td>
+            </tr>
+        {% endfor %}
+
+    </table>
+    <br><br>
+    <div id="rightfloat">
+        <form  action="/continue">
+            <input class="button"  type="submit" value="Checkout"><br>
+        </form>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,11 @@
+{# empty Twig template #}
+
+{% extends "base.html.twig" %}
+
+{% block title %} Successfully logged in {% endblock %}
+
+{% block body %}
+
+    <p>{{user.nameFirst}}, Your order is confirmed and soon you will receieve confirmation e-mail in your email id {{user.email}}.</p>
+
+{% endblock %}

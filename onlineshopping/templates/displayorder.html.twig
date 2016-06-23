@@ -1,0 +1,33 @@
+{# empty Twig template #}
+
+
+{% extends "base.html.twig" %}
+
+{% block title %}Display ordered itemsa{% endblock %}
+
+
+
+{% block body %}
+
+    <div>
+        {% for a in displayorder %}
+            <tr><td>{{a.productName}}</td><br>
+            <td>{{a.ProductPrice}}</td><br>
+            <td>{{a.rating}}</td><br>
+
+            <td>{{a.description | slice(0,50)}}...</td><br>
+
+            <td><img width=100 src="/images/{{a.image}}"> </td<br>
+            <form method="post" action="/cart">
+                <input type="hidden" name="productID" value="{{a.ID}}">
+                <input type="number" name="quantity" value="1">
+
+                <input class="button" type="submit" value="Add To Cart"><br>
+            </form>
+            <tr>
+            {% endfor %}
+    </div>
+
+
+
+{% endblock %}

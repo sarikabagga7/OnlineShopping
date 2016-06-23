@@ -1,0 +1,81 @@
+{# empty Twig template #}
+
+{% extends "base.html.twig" %}
+
+{% block title %} Payment {% endblock %}
+
+{% block body %}
+
+    {% if items %}
+
+            {% for pr in items %}
+                {{loop.index}}. {{pr.productName}} , Price:{{pr.ProductPrice}} , Quantity:{{pr.quantity}}<br>
+                {% endfor %}
+
+    {% endif %}
+    <br>
+     <tr>
+     <td>GST:{{gst}}</td><br>
+     <td>PST:{{qst}}</td><br>
+     Total Amount:<td>{{totalAmount}}</td><br>
+                </tr><br>
+
+<form method="POST" action="/checkout">
+
+    <a href="payment.html.twig"></a>
+    <label for="cardtype">Card Type:</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <select id="cardtype" name="cardtype">
+            <option value="American Express"  >American Express</option>
+            <option value="Master Card" >Master Card</option>
+            <option value="Visa"  >Visa</option>
+
+            </select><br><br>
+
+            <label for="cardno">Card Number: </label>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+           <input id="cardno " type="text" name="cardno" value={{value.cardno}}><br>  <br>
+
+             <label for="cardhoder">Cardholder Name: </label>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+           <input id="cardholder" type="text" name="cardholder" value={{value.cardholder}}><br>  <br>
+
+            <label for="expdate">Expiration Date:</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <select id="expdate" name="expdate">
+            <option value="Jan-01" >Jan-01</option>
+            <option value="Feb-02" >Feb-02</option>
+            <option value="Mar-03" >Mar-03</option>
+            <option value="Apr-04" >Apr-04</option>
+            <option value="May-05" >May-05</option>
+            <option value="Jun-06" >Jun-06</option>
+            <option value="Jul-07" >Jul-07</option>
+            <option value="Aug-08" >Aug-08</option>
+            <option value="Sep-09" >Jan-09</option>
+            <option value="Oct-10" >Oct-10</option>
+            <option value="Nov-11" >Nov-11</option>
+            <option value="Dec-12" >Dec-12</option>
+
+            </select><br><br>
+
+            <label for="expyear">Expiration Year:</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <select id="expyear" name="expyear">
+            <option value="2016" >2016</option>
+            <option value="2017" >2017</option>
+            <option value="2018" >2018</option>
+            <option value="2019" >2019</option>
+            <option value="2020" >2020</option>
+            <option value="2021" >2021</option>
+            <option value="2022" >2022</option>
+            <option value="2023" >2023</option>
+            <option value="2024" >2024</option>
+            <option value="2025" >2025</option>
+            <option value="2026" >2026</option>
+            <option value="2027" >2027</option>
+            <option value="2028" >2028</option>
+
+
+            </select><br><br>
+
+
+
+        <input class="button" id="btnsubmit" type="submit" value="Payment">
+    </form>
+
+{% endblock %}

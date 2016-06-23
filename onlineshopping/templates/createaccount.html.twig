@@ -1,0 +1,74 @@
+{# empty Twig template #}
+
+
+{% extends "base.html.twig" %}
+
+{% block title %}Register {% endblock %}
+
+{% block head %}
+
+    
+{% endblock %}
+
+{% block body %}
+      <script src="/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("input[name=email]").keyup(function () {  
+               // alert("test");
+                var email = $("input[name=email]").val();          
+                $("#message").load('/index.php/emailused/' + email);
+            });
+        });
+    </script>
+
+
+
+    {% if errorList %}
+        <ul>
+            {% for error in errorList %}
+                <li>{{error}}</li>
+                {% endfor %}
+        </ul>
+    {% endif %}
+
+    <b>Register Below:</b><br><br>
+    <form method="POST">
+
+
+        <label for="email"> Email Address
+            :</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input id="email" type="text" name="email"  value="{{email}}"> <span id="message"></span> <br><br>
+
+        <label for="firstName"> First Name:</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input id="firstName" type="text" name="firstName" value="{{v.firstName}}"><br> <br> 
+
+        <label for="lastName"> Last Name:</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input id="lastName" type="text" name="lastName" value="{{lastName}}"><br><br> 
+
+        <label for="gender">Gender:</label>   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;
+        <input type="radio" name="gender" value="Male" {{value.genderMaleSelected}}> Male
+        <input type="radio" name="gender"  value="Female"{{value.genderFemaleSelected}}> Female<br><br>
+
+
+        <label for="pass1"> Password:</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input id="pass1" type="password" name="pass1"><br><br> 
+
+        <label for="pass2"> Confirm Password :</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input id="pass2" type="password" name="pass2"><br><br> 
+        <input class="button" id="btnsubmit" type="submit" value="Create Account">
+    </form>
+
+
+
+    {% if usersList %}
+        <ul>
+            {% for user in usersList %}
+                <li>{{user.nameFirst}}:{{user.nameLast}}:{{user.email}}</li>               
+                {% endfor %}
+        </ul>
+    {% endif %}  
+
+
+{% endblock %}

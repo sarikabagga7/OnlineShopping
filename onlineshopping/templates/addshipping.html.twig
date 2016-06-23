@@ -1,0 +1,60 @@
+{# empty Twig template #}
+
+
+{% extends "base.html.twig" %}
+
+{% block title %}Shipping Address {% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+
+
+    {% if errorList %}
+        <ul>
+            {% for error in errorList %}
+                <li>{{error}}</li>
+                {% endfor %}
+        </ul>
+    {% endif %}
+
+    <b>Shipping Address:</b><br><br>
+    <form method="POST" action="/continueDelivery">
+            <label for="address">Address: </label>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;         
+           <input id="address " type="text" name="address" value={{value.address}}><br>  <br>               
+           
+             <label for="city">City: </label>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;         
+           <input id="City" type="text" name="city" value={{value.city}}><br>  <br> 
+                                                
+            <label for="province">Province:</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;         
+            <select id="province" name="province">
+            <option value="Alberta" {{value.highschoolChecked}} >Alberta</option>
+            <option value="Manitoba" {{value.collegeChecked}}>Manitoba</option>  
+            <option value="Ontario" {{value.universityChecked}} >Ontario</option>                     
+            <option value="Quebec" {{value.universityChecked}} >Quebec</option>                     
+            </select><br><br> 
+            
+             <label for="postalCode"> Postal Code:</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;          
+           <input id="postalCode" type="text" name="postalCode" value={{value.postalCode}}><br><br> 
+            
+            <label for="phoneNumber"> Phone Number:</label> &nbsp;&nbsp;          
+           <input id="phoneNumber" type="text" name="phoneNumber" value={{value.phoneNumber}}><br><br> 
+           
+        <input class="button" id="btnsubmit" type="submit" value="Continue">
+    </form>
+
+
+
+    {% if usersList %}
+        <ul>
+            {% for user in usersList %}
+                <li>{{user.nameFirst}}:{{user.nameLast}}:{{user.email}}</li>
+                    {# shout.name shout.message #}
+                {% endfor %}
+        </ul>
+    {% endif %}  
+
+
+{% endblock %}

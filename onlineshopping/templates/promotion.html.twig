@@ -1,0 +1,28 @@
+{# empty Twig template #}
+
+
+{% extends "base.html.twig" %}
+
+{% block title %}Category{% endblock %}
+
+
+
+{% block body %}
+
+    <div>
+        {% for a in promotionList %}
+
+            <div style="float: left;margin: 2px">
+                <img width=100 src="/images/{{a.image}}"> </td<br><br>
+                {{a.productName| slice(0,20)}}<br>
+                {{a.ProductPrice}}<br>
+            </div>
+
+            <input type="hidden" name="productID" value="{{product.ID}}">
+
+        {% endfor %}
+    </div>
+
+
+
+{% endblock %}
